@@ -1,7 +1,9 @@
 import { validationResult, body } from "express-validator";
-const { unSuccesfulResponse } = require("../utils/response");
-const { verifyToken } = require('../utils/token');
-const {uploadImage, deleteImage} = require('../utils/image');
+import { unSuccesfulResponse } from "../utils/response";
+import { verifyToken } from "../utils/token";
+import { uploadImage, deleteImage } from "../utils/image";
+import { NextFunction, Request, Response } from "express";
+import { UploadedFile } from "express-fileupload";
 
 /**
  * Catch errors generates by express-validator methods
@@ -10,7 +12,7 @@ const {uploadImage, deleteImage} = require('../utils/image');
  * @param next 
  * @returns 
  */
-const expressValidatorErrors = (req, res, next) => {
+const expressValidatorErrors = (req:Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (errors.isEmpty())
         return next()
@@ -18,10 +20,10 @@ const expressValidatorErrors = (req, res, next) => {
 }
 
 
-const verfyUserToken = (req, res, next) => {
+const verfyUserToken = (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers['x-token']?.toString() || 'a';
     try {
-        const { _id } = verifyToken(token);
+        const { _id } = <any> verifyToken(token);
 
         req.params._id = _id;
     } catch (err) {
@@ -38,17 +40,17 @@ const verfyUserToken = (req, res, next) => {
  * @param next 
  * @returns 
  */
-const catchErrors = (req, res, next) => {
+const catchErrors = (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req.body;
     if (errors && errors.length > 0)
         return unSuccesfulResponse(res, errors, 400);
     next();
 }
 
-const loadImage = async(req, res, next) => {
+const loadImage = async(req: Request, res:Response, next:NextFunction) => {
     
     // console.log(req.files)
-    const img = req.files?.img;
+    const img  = <UploadedFile> req.files?.img;
     if (img) {
         const tempPath = img.tempFilePath;
         try {
@@ -64,7 +66,7 @@ const loadImage = async(req, res, next) => {
 
 
 
-module.exports = {
+export {
     expressValidatorErrors,
     catchErrors,
     verfyUserToken,

@@ -1,3 +1,5 @@
+import { Result, ValidationError } from "express-validator"
+
 /**
  * @description send a response as answer of a succesful request
  * @param res express response to send a response 
@@ -14,7 +16,7 @@ export const succesfulResponse = (res, data, code = 200, msg = 'Successful') => 
 }
 
 
-
+type unsuccesfulError  = { err: string} | Result<ValidationError>;
 
 /**
  * @description send a response as answer of a unsuccesful request
@@ -23,7 +25,7 @@ export const succesfulResponse = (res, data, code = 200, msg = 'Successful') => 
  * @param code 
  * @param msg 
  */
-export const unSuccesfulResponse = (res, errors = { err: 'something went wrong. contact your server admistrator' }, code = 500, msg = 'Unsuccessful') => {
+export const unSuccesfulResponse = (res, errors: unsuccesfulError = { err: 'something went wrong. contact your server admistrator' }, code = 500, msg = 'Unsuccessful') => {
     res.json({
         ok: false,
         msg,

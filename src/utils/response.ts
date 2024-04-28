@@ -5,7 +5,7 @@
  * @param code request code
  * @param msg message
  */
- exports.succesfulResponse = (res, data, code = 200, msg = 'Successful') => {
+export const succesfulResponse = (res, data, code = 200, msg = 'Successful') => {
     res.json({
         ok: true,
         msg,
@@ -23,7 +23,7 @@
  * @param code 
  * @param msg 
  */
-exports.unSuccesfulResponse = (res, errors = { err: 'something went wrong. contact your server admistrator' }, code = 500, msg = 'Unsuccessful') => {
+export const unSuccesfulResponse = (res, errors = { err: 'something went wrong. contact your server admistrator' }, code = 500, msg = 'Unsuccessful') => {
     res.json({
         ok: false,
         msg,

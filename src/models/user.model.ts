@@ -1,52 +1,66 @@
 import { model, Schema } from "mongoose";
 import { encodePassword } from "../utils/encript.password";
 
-const userSchema = new Schema({
+const userSchema = new Schema(
+  {
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     lastname: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     password: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     img: {
-        type: String
+      type: String,
     },
     profession: {
-        type: String
+      type: String,
     },
     profile: {
-        type: String
+      type: String,
     },
     sumary: {
-        type: String
+      type: String,
     },
     greeting: {
-        type: String
+      type: String,
     },
     rol: {
-        type: String,
-        default: 'OWNER'
-    }
-    
+      type: String,
+      default: "OWNER",
+    },
+    isDisabled: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    isDeleted: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    const password = encodePassword(this.get("password"));
+    this.set("password", password);
+  }
+  next();
 });
-userSchema.pre('save', async function (next) {
-    if (this.isModified('password')) {
-        const password = encodePassword(this.get('password'));
-        this.set('password', password);
-    }
-    next();
-})
 
-const userModel =  model('user', userSchema);
+const userModel = model("user", userSchema);
 export default userModel;

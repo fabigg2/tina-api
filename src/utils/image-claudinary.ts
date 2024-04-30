@@ -15,8 +15,16 @@ cloudinary.config({
   configOptions,
 });
 
-const uploadImage = async (file) => {
-  const resp = await cloudinary.uploader.upload(file);
+const uploadImage = async (file) => {  
+  let  resp;
+  try{
+     resp = await cloudinary.uploader.upload(file);
+
+  }catch(error){
+    console.log(error);
+
+  }
+  
   return resp.secure_url;
 };
 

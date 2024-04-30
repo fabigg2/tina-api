@@ -1,7 +1,7 @@
 import { validationResult, body } from "express-validator";
 import { unSuccesfulResponse } from "../utils/response";
 import { verifyToken } from "../utils/token";
-import { uploadImage, deleteImage } from "../utils/image";
+import * as clauidinary from "../utils/image-claudinary";
 import { NextFunction, Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 
@@ -51,15 +51,19 @@ const loadImage = async(req: Request, res:Response, next:NextFunction) => {
     
     // console.log(req.files)
     const img  = <UploadedFile> req.files?.img;
+    
+    
     if (img) {
         const tempPath = img.tempFilePath;
         try {
-            req.body.img= await uploadImage(tempPath);
+            const url = await clauidinary.uploadImage(tempPath);
+            console.log(url);
+            
         } catch (error) {
             unSuccesfulResponse(res);
         }
     }
-    next();
+    next()
 
 }
 

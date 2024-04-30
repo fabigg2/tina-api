@@ -3,6 +3,7 @@ import userRoutes from "./user.routes";
 
 import fileupload from "express-fileupload";
 import { authRoutes } from "./auth";
+import skillRoutes from "./skill.routes";
 
 const routes = express();
 
@@ -12,6 +13,7 @@ routes.use(fileupload({
 
 routes.use('/user',userRoutes);
 routes.use('/auth', authRoutes);
+routes.use('/skill', skillRoutes);
 
 
 

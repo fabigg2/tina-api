@@ -5,10 +5,35 @@ import { expressValidatorErrors } from "../middlewares/globals";
 
 const userRoutes = Router();
 
+/**
+ * @openapi
+ * tags:
+ *  - name: user
+ *    description: Everything about users
+ */
+
 //getting a list of users
 userRoutes.get("/all", userController.findAll);
 
-// Creating a new user
+/**
+ * @openapi
+ * /user:
+ *   post:
+ *     summary: Create user
+ *     tags:
+ *      - user
+ *     requestBody: 
+ *      required: true
+ *      content:
+ *       application/json:
+ *         schema:
+ *            $ref: '#/components/schemas/User'
+ *     responses:
+ *       201:
+ *         description: User created successfuly.
+ *       500:
+ *         description: server error 
+ */
 userRoutes.post(
   "/",
   [

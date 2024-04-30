@@ -19,7 +19,7 @@ const userController = {
     try {
       const user = await newUser.save();
       if (user)
-        res.json({
+        res.status(201).json({
           data: user,
         });
     } catch (error) {

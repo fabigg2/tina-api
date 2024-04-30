@@ -7,11 +7,11 @@ const openapiSpecification = swaggerJsdoc(
           openapi: '3.0.0',
           info: {
             version: '1.0',
-            title: 'Briefcase',
+            title: 'Talkit',
           },
           servers:[ {url:`http://localhost:${5000}/api`}]
         },
-        apis : ['./src/routes/*.js', './src/models/*.js']  // files containing annotations as above
+        apis : ['./src/routes/*.js', './src/models/*.js', './src/models/*.ts', './src/routes/*.ts']  // files containing annotations as above
       }
 );
 

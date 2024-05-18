@@ -16,7 +16,7 @@ export const succesfulResponse = (res, data, code = 200, msg = 'Successful') => 
 }
 
 
-type unsuccesfulError  = { err: string} | Result<ValidationError>;
+type unsuccesfulError  = { err: string} | Result<ValidationError> | any;
 
 /**
  * @description send a response as answer of a unsuccesful request
@@ -25,7 +25,7 @@ type unsuccesfulError  = { err: string} | Result<ValidationError>;
  * @param code 
  * @param msg 
  */
-export const unSuccesfulResponse = (res, errors: unsuccesfulError = { err: 'something went wrong. contact your server admistrator' }, code = 500, msg = 'Unsuccessful') => {
+export const unSuccesfulResponse = (res, errors: unsuccesfulError  = { err: 'something went wrong. contact your server admistrator' }, code = 500, msg = 'Unsuccessful') => {
     res.json({
         ok: false,
         msg,

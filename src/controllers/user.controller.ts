@@ -1,10 +1,10 @@
-import userModel from "../models/user.model";
+import UserModel from "../models/user.model";
 import { Request, Response } from "express";
 
 const userController = {
   // get all users records
   async findAll(req: Request, res: Response) {
-    const users = await userModel.find({isDeleted:false});
+    const users = await UserModel.query();
     res.json({
       data: users,
       msg: "Successfull",
@@ -15,9 +15,8 @@ const userController = {
   //create a new user
   async createUser(req: Request, res: Response) {
     const { body } = req;
-    const newUser = new userModel(body);
     try {
-      const user = await newUser.save();
+      const user = (await UserModel.query().insert(body));
       if (user)
         res.status(201).json({
           data: user,

@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { Model, QueryContext } from 'objection';
 import { encodePassword } from "../utils/encript.password";
 
 
@@ -38,66 +38,79 @@ import { encodePassword } from "../utils/encript.password";
  *              -password
  */
 
-const userSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-    lastname: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    img: {
-      type: String,
-    },
-    profession: {
-      type: String,
-    },
-    profile: {
-      type: String,
-    },
-    sumary: {
-      type: String,
-    },
-    greeting: {
-      type: String,
-    },
-    rol: {
-      type: String,
-      default: "OWNER",
-    },
-    isDisabled: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    isDeleted: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
-userSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
-    const password = encodePassword(this.get("password"));
-    this.set("password", password);
-  }
-  next();
-});
+interface UserInterface {
+  id: number;
+  name: string;
+  username: string;
+  lastname: string;
+  email: string;
+  password: string;
+  birth?: string; // Date of birth (optional)
+  gender?: 'Male' | 'Female' | 'Other'; // Gender (optional)
+  puser_type_id?: number; // User type ID (optional)
+  is_connected?: boolean;
+  is_google?: boolean;
+  is_disabled?: boolean;
+  is_deleted?: boolean;
+  created_at?: string; // Timestamp (optional)
+  updated_at?: string; // Timestamp (optional)
+}
 
-const userModel = model("user", userSchema);
-export default userModel;
+
+
+
+class UserModel extends Model implements UserInterface {
+  id: number;
+  name: string;
+  username: string;
+  lastname: string;
+  email: string;
+  password: string;
+  birth?: string;
+  gender?: 'Male' | 'Female' | 'Other';
+  puser_type_id?: number;
+  is_connected?: boolean;
+  is_google?: boolean;
+  is_disabled?: boolean;
+  is_deleted?: boolean;
+  created_at?: string;
+  updated_at?: string;
+
+  static get tableName() {
+    return 'users';
+  }
+
+  static get idColumn() {
+    return 'id';
+  }
+
+  $beforeInsert(queryContext: QueryContext): void | Promise<any> {
+    this.password = encodePassword(this.password);
+  }
+
+  static get jsonSchema() {
+    return {
+      type: 'object',
+      required: ['name', 'lastname', 'email', 'password'],
+      properties: {
+        id: { type: 'integer' },
+        name: { type: 'string', minLength: 1, maxLength: 255 },
+        username: { type: 'string', minLength: 1, maxLength: 255 },
+        lastname: { type: 'string', minLength: 1, maxLength: 255 },
+        email: { type: 'string', format: 'email', maxLength: 255 },
+        password: { type: 'string', minLength: 6, maxLength: 255 },
+        birth: { type: 'string', format: 'date' },
+        gender: { type: 'string', enum: ['Male', 'Female', 'Other'] },
+        puser_type_id: { type: 'integer' },
+        is_connected: { type: 'boolean' },
+        is_google: { type: 'boolean' },
+        is_disabled: { type: 'boolean' },
+        is_deleted: { type: 'boolean' },
+        created_at: { type: 'string', format: 'date-time' },
+        updated_at: { type: 'string', format: 'date-time' },
+      },
+    };
+  }
+}
+
+export default UserModel;

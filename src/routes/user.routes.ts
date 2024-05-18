@@ -2,6 +2,7 @@ import { Router } from "express";
 import userController from "../controllers/user.controller";
 import { check } from "express-validator";
 import { expressValidatorErrors } from "../middlewares/globals";
+import { emailExist } from "../middlewares/user.middleware";
 
 const userRoutes = Router();
 
@@ -41,6 +42,7 @@ userRoutes.post(
     check("lastname", "lastname is required").notEmpty(),
     check("email", "email is invalid").isEmail().isEmail(),
     check("password", "password is invalid").notEmpty(),
+    emailExist,
     expressValidatorErrors,
   ],
   userController.createUser

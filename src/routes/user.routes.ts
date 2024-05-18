@@ -13,14 +13,34 @@ const userRoutes = Router();
  *    description: Everything about users
  */
 
-//getting a list of users
+/**
+ * @openapi
+ * /user/all:
+ *   get:
+ *     summary: users list
+ *     tags:
+ *      - user
+ *     responses:
+ *       200:
+ *         description: User created successfuly.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       500:
+ *         description: server error 
+ */
+
+
 userRoutes.get("/all", userController.findAll);
+
+
 
 /**
  * @openapi
  * /user:
  *   post:
- *     summary: Create user
+ *     summary: Create new user
  *     tags:
  *      - user
  *     requestBody: 

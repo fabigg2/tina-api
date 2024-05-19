@@ -1,8 +1,8 @@
 import { v2 as cloudinary, ConfigOptions } from "cloudinary";
 
-const cloud_name = "dcbpbghxj";
-const api_key = "925141458417749";
-const api_secret = "7S0mB8Z4u4jzu4E-Y7Gdb32ASyU";
+const cloud_name = "";
+const api_key = "";
+const api_secret = "";
 
 const configOptions: ConfigOptions = {
   api_key,
